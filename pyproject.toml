@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "market-data-aggregation"
+version = "0.1.0"
+description = ""
+authors = ["Dmitry Morozov <morozov124@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.10.6"
+pydantic-settings = "^2.7.1"
+mypy = "^1.15.0"
+psycopg = "^3.2.4"
+psycopg-pool = "^3.2.4"
+aiohttp = "^3.11.11"
+loguru = "^0.7.3"
+plotly-express = "^0.4.1"
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
