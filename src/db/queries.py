@@ -69,8 +69,13 @@ data_for_calculation = """
                     UNION
                     SELECT trade_date, ticker, closing_price, 0
                     FROM results_of_trades
-                    WHERE EXTRACT(DAY FROM trade_date) = %(monthly_purchase_day)s
+                    WHERE trade_date >= (
+                        SELECT min(trade_date) 
+                        FROM results_of_trades 
+                        WHERE ticker = %(ticker)s
+                        )
                         AND (ticker = %(ticker)s OR ticker = 'day_off')
+                        AND EXTRACT(DAY FROM trade_date) = %(monthly_purchase_day)s
                     ORDER BY trade_date;"""
 
 processed_data = """     
