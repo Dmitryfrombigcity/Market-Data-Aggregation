@@ -6,13 +6,14 @@ import pytest
 from _pytest.fixtures import FixtureRequest
 from loguru import logger
 
-from tests.data_collection.data.dividends import DIVIDENDS_0, DIVIDENDS_1, DIVIDENDS_3, DIVIDENDS_0_lst, DIVIDENDS_1_lst, \
+from tests.data_collection.data.dividends import DIVIDENDS_0, DIVIDENDS_1, DIVIDENDS_3, DIVIDENDS_0_lst, \
+    DIVIDENDS_1_lst, \
     DIVIDENDS_3_lst
 from tests.data_collection.data.moex_0 import MOEX_0_lst, MOEX_0
 from tests.data_collection.data.moex_1 import MOEX_1_lst, MOEX_1
 
-data_lst = [MOEX_0_lst, MOEX_1_lst, DIVIDENDS_0_lst, DIVIDENDS_1_lst, DIVIDENDS_3_lst]
-data = [MOEX_0, MOEX_1, DIVIDENDS_0, DIVIDENDS_1, DIVIDENDS_3]
+data_lst = [MOEX_0_lst, MOEX_1_lst, DIVIDENDS_0_lst, DIVIDENDS_1_lst, DIVIDENDS_3_lst, [()]]
+data = [MOEX_0, MOEX_1, DIVIDENDS_0, DIVIDENDS_1, DIVIDENDS_3, None]
 
 
 class Temp(NamedTuple):

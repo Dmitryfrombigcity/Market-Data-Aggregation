@@ -25,7 +25,7 @@ class TestDataCollection:
 
     @pytest.mark.parametrize(
         "start, page, mockers", [
-            (0, 0, (0, 0)),
+            (0, 0, (5, 5)),
         ], indirect=["mockers"]
     )
     async def test_2(self, mockers: MagicMock, start: int, page: int) -> None:
@@ -46,7 +46,7 @@ class TestDataCollection:
 
     @pytest.mark.parametrize(
         "mockers", [
-            (0, 0),
+            (5, 5),
         ], indirect=["mockers"]
     )
     async def test_4(self, mockers: MagicMock) -> None:
