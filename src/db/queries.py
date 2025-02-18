@@ -107,6 +107,6 @@ get_next_record = """
                     WHERE (ticker = %(ticker)s  OR ticker = 'day_off')
                     AND trade_date = %(date)s::date + 1;
                     """
-truncate_processed_data = """
-                    TRUNCATE TABLE processed_data;
+truncate = """
+                    TRUNCATE TABLE {table};
                     """

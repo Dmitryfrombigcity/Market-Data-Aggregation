@@ -2,11 +2,13 @@ from asyncio import TaskGroup
 from typing import Any, cast
 
 from loguru import logger
+from psycopg import sql
 
 from src.aiohttp.connection import connection
 from src.aiohttp.settings import URL_HISTORY, URL_DIVIDENDS
 from src.db.crud import db_read, db_update
-from src.db.queries import check_for_updates, insert_results_of_trades, check_for_dividends, insert_dividends
+from src.db.queries import check_for_updates, insert_results_of_trades, check_for_dividends, insert_dividends, \
+    truncate
 from src.db.schemas import Flag
 from src.pydantic.models import Page, ResultData, PagesHistory, ResultDividends
 
@@ -17,11 +19,15 @@ async def get_information(ticker: str, index: int = 0) -> tuple[str, Page]:
     session = await anext(connection)
     try:
         async with session.get(f'{URL_HISTORY}{ticker}.json?start={index}') as response:
+            response.raise_for_status()
             data_block = ResultData.model_validate_json(await response.text())
             pages_block = PagesHistory.model_validate_json(await response.text())
             pages = pages_block.history_cursor.data.pages_info
     except Exception as err:
         logger.exception(err)
+        query = sql.SQL(truncate).format(
+            table=sql.Identifier('results_of_trades'))
+        await db_update(query, [()])
         raise
 
     # checking for page updates
@@ -47,10 +53,12 @@ async def get_dividends(ticker: str, ) -> None:
     session = await anext(connection)
     try:
         async with session.get(f'{URL_DIVIDENDS}{ticker}/dividends.json') as response:
-            # print(response.status)
             data_block = ResultDividends.model_validate_json(await response.text())
     except Exception as err:
         logger.exception(err)
+        query = sql.SQL(truncate).format(
+            table=sql.Identifier('dividends'))
+        await db_update(query, [()])
         raise
     else:
         flag = cast(list[Flag], await db_read(check_for_dividends, (ticker,)))  # to satisfy mypy
@@ -66,6 +74,6 @@ async def collect_information(ticker: str, pages: Page, ) -> None:
 
     async with TaskGroup() as group:
         for index in range(
-                pages.ind + pages.pagesize, pages.total + 100, pages.pagesize
+                pages.ind, pages.total, pages.pagesize
         ):
             group.create_task(get_information(ticker, index))
