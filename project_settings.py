@@ -28,7 +28,7 @@ bunch_of_tickers = {
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', extra='ignore')
 
-    BUNCH_OF_TICKERS: Annotated[tuple[str, ...], NoDecode] = Field(default=('SBER', 'SBERP', 'LKOH',))
+    BUNCH_OF_TICKERS: Annotated[tuple[str, ...], NoDecode] = Field(default='SBER, SBERP, LKOH')
     MONTHLY_INVESTMENTS: Decimal = Field(default=Decimal(1000), gt=0)
     DIVIDENDS_PURCHASE_DAY_OFFSET: int = Field(default=8, ge=0, le=28)
     MONTHLY_PURCHASE_DAY: int = Field(default=1, ge=0, le=28)
