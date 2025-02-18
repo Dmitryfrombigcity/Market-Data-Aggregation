@@ -1,6 +1,8 @@
 from typing import AsyncGenerator
 
+
 import aiohttp
+from loguru import logger
 
 from src.aiohttp.settings import HEADERS, setting
 
@@ -17,7 +19,7 @@ async def get_session() -> AsyncGenerator[aiohttp.ClientSession, None]:
             while True:
                 yield session
         finally:
-            print('closed')
+            logger.info("aiohttp.ClientSession has closed")
 
 
 connection = get_session()
