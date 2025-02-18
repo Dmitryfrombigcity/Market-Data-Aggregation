@@ -1,5 +1,4 @@
 import asyncio
-import sys
 from asyncio import TaskGroup
 from time import perf_counter
 from typing import Any, Iterable
@@ -13,6 +12,7 @@ from src.data_collection import get_information, get_dividends, collect_informat
 from src.data_processing import data_processing
 from src.db.crud import db_update, db_create
 from src.db.queries import results_of_trades, dividends, insert_days_off_to_results_of_trades, processed_data
+from src.utils import start_db
 
 
 async def main(tickers: Iterable[str]) -> None:
@@ -52,10 +52,10 @@ async def main(tickers: Iterable[str]) -> None:
 
 if __name__ == '__main__':
     logger.configure(**config)  # type:ignore
-    tickers = setting.BUNCH_OF_TICKERS
-    # with start_db():
-    start = perf_counter()
     logger.info('Starting...')
-    asyncio.run(main(tickers))
-    logger.info('Ending...')
-    print(perf_counter() - start)
+    tickers = setting.BUNCH_OF_TICKERS
+    with start_db():
+        start = perf_counter()
+        asyncio.run(main(tickers))
+        logger.info('Ending...')
+        print(perf_counter() - start)
