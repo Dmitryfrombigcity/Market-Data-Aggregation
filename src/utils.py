@@ -12,12 +12,26 @@ from pydantic_settings import BaseSettings
 @contextmanager
 def start_db() -> Iterator[None]:
     """ database management"""
-    subprocess.run('docker compose -f docker.yml up -d', shell=True)
+
+    subpr = subprocess.run(
+        'docker compose -f docker.yml up -d',
+        stderr=subprocess.PIPE,
+        text=True,
+        shell=True
+    )
+    if subpr.returncode:
+        print("Docker not found. Trying to connect to local database...")
+        logger.error(subpr.stderr)
+    print("Docker is starting...")
     sleep(10)
     try:
         yield
     finally:
-        subprocess.run('docker compose -f docker.yml down', shell=True)
+        subprocess.run(
+            'docker compose -f docker.yml down',
+            stderr=subprocess.PIPE,
+            shell=True
+        )
 
 
 def instantiate[T: BaseSettings](Settings: Type[T]) -> T:
