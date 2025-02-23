@@ -22,8 +22,8 @@ def start_db() -> Iterator[None]:
     if subpr.returncode:
         print("Docker not found. Trying to connect to local database...")
         logger.error(subpr.stderr)
-    print("Docker is starting...")
-    sleep(10)
+    print("Docker is starting...", end='')
+    sleep(5)
     try:
         yield
     finally:
