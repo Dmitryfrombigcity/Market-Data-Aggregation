@@ -58,25 +58,26 @@ check_for_dividends = """
                     HAVING ticker = %s;"""
 
 data_for_calculation = """
-                    SELECT trade_date, r.ticker, closing_price, value
+                    WITH temp AS(
+                        SELECT trade_date, r.ticker, closing_price, value
+                        FROM results_of_trades AS r
+                        JOIN (
+                            SELECT * FROM dividends 
+                            WHERE ticker = %(ticker)s
+                            ) AS d
+                            ON trade_date  = registry_closing_date + %(dividends_purchase_day_offset)s
+                        WHERE r.ticker = %(ticker)s OR r.ticker = 'day_off'
+                        )
+                    SELECT trade_date, r.ticker, r.closing_price, value
                     FROM results_of_trades AS r
-                    JOIN (
-                        SELECT * FROM dividends 
-                        WHERE ticker = %(ticker)s
-                        ) AS d
-                        ON trade_date  = registry_closing_date + %(dividends_purchase_day_offset)s
-                    WHERE r.ticker = %(ticker)s OR r.ticker = 'day_off'
-                    UNION
-                    SELECT trade_date, ticker, closing_price, 0
-                    FROM results_of_trades
+                    LEFT JOIN temp USING(trade_date)
                     WHERE trade_date >= (
                         SELECT min(trade_date) 
                         FROM results_of_trades 
                         WHERE ticker = %(ticker)s
                         )
-                        AND (ticker = %(ticker)s OR ticker = 'day_off')
-                        AND EXTRACT(DAY FROM trade_date) = %(monthly_purchase_day)s
-                    ORDER BY trade_date;"""
+                        AND (r.ticker = %(ticker)s OR r.ticker = 'day_off')
+                        ORDER BY trade_date;"""
 
 processed_data = """     
                     CREATE TABLE  processed_data(
@@ -107,6 +108,6 @@ get_next_record = """
                     WHERE (ticker = %(ticker)s  OR ticker = 'day_off')
                     AND trade_date = %(date)s::date + 1;
                     """
-truncate = """
+truncate = """  
                     TRUNCATE TABLE {table};
                     """
