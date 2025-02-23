@@ -44,6 +44,7 @@ async def get_information(ticker: str, index: int = 0) -> tuple[str, Page]:
             (item.TRADEDATE, item.SECID, item.CLOSE, pages.total)
         )
     await db_update(insert_results_of_trades, data_mod)
+    print(pages)
     return ticker, pages
 
 
