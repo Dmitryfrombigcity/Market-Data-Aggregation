@@ -9,7 +9,7 @@ async def get_pool() -> AsyncGenerator[AsyncConnectionPool, None]:
     async with AsyncConnectionPool(
             conninfo=setting.uri,
             open=False,
-            timeout=5,
+            timeout=30,
             max_size=setting.POOL_MAX_SIZE
     ) as pool:
         while True:
