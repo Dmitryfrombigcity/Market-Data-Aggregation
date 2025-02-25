@@ -1,4 +1,3 @@
-import os
 import subprocess
 from time import sleep
 from typing import Iterator, AsyncIterator
