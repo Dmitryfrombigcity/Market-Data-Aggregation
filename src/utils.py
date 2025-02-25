@@ -14,7 +14,7 @@ def start_db() -> Iterator[None]:
     """ database management"""
 
     subpr = subprocess.run(
-        'docker compose -f docker.yml up -d',
+        'docker compose -f postgrs_on_docker.yml up -d',
         stderr=subprocess.PIPE,
         text=True,
         shell=True
@@ -28,7 +28,7 @@ def start_db() -> Iterator[None]:
         yield
     finally:
         subprocess.run(
-            'docker compose -f docker.yml down',
+            'docker compose -f postgrs_on_docker.yml down',
             stderr=subprocess.PIPE,
             shell=True
         )
