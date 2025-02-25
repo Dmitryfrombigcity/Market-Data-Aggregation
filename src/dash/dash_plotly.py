@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import signal
+import sys
 import threading
 import webbrowser
 
@@ -11,9 +12,10 @@ import pandas as pd
 import plotly.express as px
 from dash import Dash, Output, Input, callback, clientside_callback, html, dcc
 
-from src.dash.connection import conn
-from src.dash.queries import get_info, get_tickers
-from src.dash.settings import setting
+sys.path.append(os.getcwd())
+from connection import conn
+from queries import get_info, get_tickers
+from settings import setting
 
 logging.captureWarnings(True)
 log = logging.getLogger("werkzeug")
@@ -82,7 +84,7 @@ slider = html.Div(
         dcc.RangeSlider(
             dates.min(),
             dates.max(),
-            30,
+            1,
             id="dates",
             value=[dates.min(), dates.max()],
             marks={
@@ -189,7 +191,7 @@ def shutdown():
     return json.dumps('')
 
 
-def main():
+def main() -> None:
     threading.Timer(
         interval=1,
         function=webbrowser.open_new_tab,
