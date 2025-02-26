@@ -12,7 +12,7 @@ import pandas as pd
 import plotly.express as px
 from dash import Dash, Output, Input, callback, clientside_callback, html, dcc
 
-sys.path.append(os.getcwd())
+sys.path.append(os.getcwd())  # https://shorturl.at/KqU2Q
 from connection import conn
 from queries import get_info, get_tickers
 from settings import setting
