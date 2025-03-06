@@ -29,6 +29,7 @@ class TickerData(NamedTuple):
     TRADINGSESSION: float | None
     CURRENCYID: str
     TRENDCLSPR: float | None
+    TRADE_SESSION_DATE: str | None
 
 
 class TickersData(BaseModel):
