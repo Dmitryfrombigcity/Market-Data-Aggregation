@@ -11,7 +11,7 @@ python = "^3.12"
 pydantic = "^2.10.6"
 pydantic-settings = "^2.7.1"
 mypy = "^1.15.0"
-psycopg = "^3.2.4"
+psycopg = {extras = ["binary"], version = "^3.2.6"}
 psycopg-pool = "^3.2.4"
 aiohttp = "^3.11.11"
 loguru = "^0.7.3"
