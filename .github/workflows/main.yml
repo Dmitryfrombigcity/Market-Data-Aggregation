@@ -2,17 +2,20 @@ name: First
 on: [workflow_dispatch]
 jobs: 
   test_windows:
-    runs-on:  ubuntu-latest
+    runs-on:  windows-latest
     steps:
                  
       - name: clone
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12' 
       - name : test python version
         run : python3 --version
       - name : install dependecies
-        run : pip install -r requirements.txt
+      - run : pip install -r requirements.txt
       - name: run
-        run : python3 main.py
+      - run : python3 main.py
        
     
   
