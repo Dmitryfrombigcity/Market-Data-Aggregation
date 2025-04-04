@@ -8,11 +8,11 @@ jobs:
       - name: clone
         uses: actions/checkout@v4
       - name : test python version
-        run : which python3
+        run : python3 --version
       - name : install dependecies
         run : pip install -r requirements.txt
       - name: run
-        run : python main.py
+        run : python3 main.py
        
     
   
