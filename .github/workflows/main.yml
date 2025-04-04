@@ -5,7 +5,7 @@ jobs:
     runs-on:  ubuntu-latest
     steps:
       - name: first
-        run : python main.py
+        run : main.py
        
     
   
