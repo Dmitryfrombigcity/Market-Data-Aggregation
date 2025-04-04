@@ -7,6 +7,8 @@ jobs:
                  
       - name: clone
         uses: actions/checkout@v4
+      - name : install dependecies
+        run : pip install -r requirements.txt
       - name: run
         run : python main.py
        
