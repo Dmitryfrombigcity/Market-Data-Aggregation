@@ -11,13 +11,15 @@ jobs:
     steps:
       - name: cloning
         uses: actions/checkout@v4
-      - name: install poetry
-        run: pipx install poetry
       - name: install Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
           cache: 'poetry'
+      - name: install poetry
+        run: |
+          pip install poetry==1.8.3 
+          poetry config virtualenvs.create false
       - name: add deps
         run: poetry install
       - name: test
