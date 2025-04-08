@@ -21,7 +21,9 @@ jobs:
           pip install poetry==1.8.3 
           poetry config virtualenvs.create false
       - name: add deps
-        run: poetry install
+        run: |
+          poetry env use system
+          poetry install --no-root
       - name: test
         run: pytest -vv
 
