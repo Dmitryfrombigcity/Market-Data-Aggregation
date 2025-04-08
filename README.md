@@ -145,7 +145,7 @@ python dash_only.py
 Для проверки работы с базой данных используется тестовая база с предопределенным набором данных.
 ### Запуск тестов:
 ```
-cd Market-Data-Aggregation/tests/   
+cd Market-Data-Aggregation/   
 pytest --verbose
 ```
 ## Используемые технологии:
