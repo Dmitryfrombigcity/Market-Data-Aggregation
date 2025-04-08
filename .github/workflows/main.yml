@@ -22,7 +22,6 @@ jobs:
           poetry config virtualenvs.create false
       - name: add deps
         run: |
-          poetry env use python3.10
           poetry install --no-root
       - name: test
         run: pytest -vv
