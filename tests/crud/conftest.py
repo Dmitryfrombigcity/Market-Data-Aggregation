@@ -6,25 +6,29 @@ import pytest
 from loguru import logger
 from psycopg import AsyncConnection
 
+from project_settings import setting
 from src.db.connection import connection
 
 
 @pytest.fixture(scope='module')
 def start_db() -> Iterator[None]:
-    subprocess.run(
-        'docker compose -f docker_for_tests.yml up -d',
-        shell=True,
-        capture_output=True
-    )
-    sleep(5)
-    try:
-        yield
-    finally:
+    """ When using GitHub Actions, local PostgreSQL will be used."""
+
+    if not setting.ACTIONS_TEST:
         subprocess.run(
-            'docker compose -f docker_for_tests.yml down',
+            'docker compose -f tests/docker_for_tests.yml up -d',
             shell=True,
             capture_output=True
         )
+        sleep(5)
+        try:
+            yield
+        finally:
+            subprocess.run(
+                'docker compose -f tests/docker_for_tests.yml down',
+                shell=True,
+                capture_output=True
+            )
 
 
 @pytest.fixture(scope='function')
