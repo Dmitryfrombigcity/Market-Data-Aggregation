@@ -29,6 +29,7 @@ jobs:
       - name: add deps
         run: |
           poetry install --no-root
+      - run: echo "${{ env.ACTIONS_TEST }}
       - name: test
         run: pytest -vv
 
