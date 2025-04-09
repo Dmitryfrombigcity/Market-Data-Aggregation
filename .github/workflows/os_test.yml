@@ -23,7 +23,7 @@ jobs:
             ${{ runner.os }}-pypoetry-
       - name: cloning
         uses: actions/checkout@v4.2.2
-      - run: docker compose -f test\docker_for_tests.yml up -d
+      - run: docker compose -f tests\docker_for_tests.yml up -d
       - name: install Python
         uses: actions/setup-python@v5
         with:
