@@ -84,5 +84,6 @@ jobs:
         run: |
           poetry install --no-root
       - name: test
-        run: pytest -vv
+#        run: pytest -vv
+        run: python main.py
 

@@ -9,15 +9,15 @@ from psycopg.errors import DuplicateTable
 from project_settings import setting
 from src.data_processing import data_processing
 from src.db.crud import db_create, db_update, db_read
-from src.db.queries import results_of_trades, insert_days_off_to_results_of_trades, insert_results_of_trades, dividends, \
-    insert_dividends, processed_data
+from src.db.queries import results_of_trades, insert_days_off_to_results_of_trades, insert_results_of_trades, \
+    dividends, insert_dividends, processed_data
 from tests.crud.data.day_offs import data_with_day_offs, data_without_day_offs, final_data
 from tests.crud.data.queries import query, insert_data, data, read, data_result, read_days_off, dividends_lst
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 
-# if sys.platform == "win32":
-#     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
 @pytest.mark.usefixtures("start_db", "clean_after_test")
