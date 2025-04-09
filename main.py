@@ -18,6 +18,9 @@ from src.db.crud import db_update, db_create
 from src.db.queries import results_of_trades, dividends, insert_days_off_to_results_of_trades, processed_data
 from src.utils import start_db
 
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 
 async def main(tickers: Iterable[str]) -> None:
     try:
