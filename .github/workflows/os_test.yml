@@ -42,7 +42,9 @@ jobs:
           # see https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows
           WSLENV: MY_ENV_VAR
       - name: Set up Docker
-        uses: docker/setup-docker-action@v4
+        run: |
+          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        shell: wsl-run {0}
 
 
       - run: docker compose -f tests/docker_for_tests.yml up -d
