@@ -5,6 +5,8 @@ on:
       python-version:
         required: true
         type: string
+# env:
+#   ACTIONS_TEST: true        
 jobs:
   test:
     runs-on: ubuntu-latest
