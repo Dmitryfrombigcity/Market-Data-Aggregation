@@ -64,7 +64,7 @@ async def main(tickers: Iterable[str]) -> None:
 
     except BaseException as err:
         logger.error(repr(err))
-        print('>>> An error occurred. Please see the log.')
+        print('>>> An error occurred. Please see the log.', repr(err))
 
 
 if __name__ == '__main__':
