@@ -1,3 +1,6 @@
+import asyncio
+import sys
+
 import pytest
 from _pytest.fixtures import FixtureFunction
 from psycopg import sql
@@ -12,6 +15,9 @@ from tests.crud.data.day_offs import data_with_day_offs, data_without_day_offs, 
 from tests.crud.data.queries import query, insert_data, data, read, data_result, read_days_off, dividends_lst
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
+
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
 @pytest.mark.usefixtures("start_db", "clean_after_test")

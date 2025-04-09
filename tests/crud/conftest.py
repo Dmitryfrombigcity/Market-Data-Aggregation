@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from time import sleep
 from typing import Iterator, AsyncIterator
 
@@ -11,8 +12,13 @@ from src.db.connection import connection
 
 @pytest.fixture(scope='module')
 def start_db() -> Iterator[None]:
+
+    path = 'docker compose -f tests/docker_for_tests.yml'
+    if sys.platform == "win32":
+        path = 'docker-compose.exe -f tests\\docker_for_tests.yml'
+
     subprocess.run(
-        'docker compose -f tests/docker_for_tests.yml up -d',
+        f'{path} up -d',
         shell=True,
         capture_output=True
     )
@@ -21,7 +27,7 @@ def start_db() -> Iterator[None]:
         yield
     finally:
         subprocess.run(
-            'docker compose -f tests/docker_for_tests.yml down',
+            f'{path} down',
             shell=True,
             capture_output=True
         )
