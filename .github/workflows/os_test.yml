@@ -43,7 +43,7 @@ jobs:
           WSLENV: MY_ENV_VAR
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
-        shell: wsl-run {0}
+
 
       - run: docker compose -f tests/docker_for_tests.yml up -d
         shell: wsl-run {0}
