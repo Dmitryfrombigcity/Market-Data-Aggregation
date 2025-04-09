@@ -16,8 +16,6 @@ class Settings(BaseSettings):
     MONTHLY_PURCHASE_DAY: int = Field(default=1, ge=1, le=28)
     LIMIT_OF_DAYS_FOR_PRICE_SEARCH: int = Field(default=28, ge=1, le=28)
 
-    ACTIONS_TEST: bool = False
-
     @field_validator('BUNCH_OF_TICKERS', mode='before')
     @classmethod
     def decode_numbers(cls, v: str) -> tuple[str, ...]:
