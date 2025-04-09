@@ -29,6 +29,8 @@ def start_db() -> Iterator[None]:
                 shell=True,
                 capture_output=True
             )
+    else:
+        yield
 
 
 @pytest.fixture(scope='function')
