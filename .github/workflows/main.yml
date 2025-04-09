@@ -5,8 +5,8 @@ on:
       python-version:
         required: true
         type: string
-# env:
-#   ACTIONS_TEST: true        
+env:
+  ACTIONS_TEST: true        
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -31,7 +31,7 @@ jobs:
       - name: add deps
         run: |
           poetry install --no-root
-      - run: echo "${{ vars.ACTIONS_TEST }}"
+      - run: echo "${{ env.ACTIONS_TEST }}"
       - name: test
         run: pytest -vv
 
