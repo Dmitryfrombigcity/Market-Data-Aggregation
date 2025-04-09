@@ -1,4 +1,4 @@
-name: ubuntu-latest  windows-latest
+name: ubuntu-latest  windows-latest macos-latest
 on: push
 jobs:
   test:
@@ -6,13 +6,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
         version: [ "3.12" ]
         include:
           - os: ubuntu-latest
             path: ~/.cache/pypoetry
-#          - os: windows-latest
-#            path: ~\AppData\Local\pypoetry\Cache
+          - os: windows-latest
+            path: ~\AppData\Local\pypoetry\Cache
     env:
       PGHOST: localhost
       PGPORT: 5433
@@ -25,41 +25,41 @@ jobs:
       - name: Install PostgreSQL on macOS
         if: runner.os == 'macOS'
         run: |
-           brew install postgresql@16
-           # --overwrite: Overwrite pre-installed GitHub Actions PostgreSQL binaries
-           brew link --overwrite postgresql@16
+          brew install postgresql@16
+          # --overwrite: Overwrite pre-installed GitHub Actions PostgreSQL binaries
+          brew link --overwrite postgresql@16
       - name: Add PostgreSQL binaries to PATH
         shell: bash
         run: |
-           if [ "$RUNNER_OS" == "Windows" ]; then
-           echo "$PGBIN" >> $GITHUB_PATH
-           elif [ "$RUNNER_OS" == "Linux" ]; then
-           echo "$(pg_config --bindir)" >> $GITHUB_PATH
-           fi
+          if [ "$RUNNER_OS" == "Windows" ]; then
+          echo "$PGBIN" >> $GITHUB_PATH
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+          echo "$(pg_config --bindir)" >> $GITHUB_PATH
+          fi
       - name: Start preinstalled PostgreSQL
         shell: bash
         run: |
-           echo "Initializing database cluster..."
-
-           # Convert backslashes to forward slashes in RUNNER_TEMP for Windows Git Bash
-           export PGHOST="${RUNNER_TEMP//\\//}/postgres"
-           export PGDATA="$PGHOST/pgdata"
-           mkdir -p "$PGDATA"
-
-           # initdb requires file for password in non-interactive mode
-           export PWFILE="$RUNNER_TEMP/pwfile"
-           echo "postgres" > "$PWFILE"
-           initdb --pgdata="$PGDATA" --username="postgres" --pwfile="$PWFILE"
-
-           echo "Starting PostgreSQL..."
-           echo "unix_socket_directories = '$PGHOST'" >> "$PGDATA/postgresql.conf"
-           pg_ctl  start
-
-           echo "Creating user..."
-           psql --host "$PGHOST" --username="postgres" --dbname="postgres" --command="CREATE USER $PGUSERNAME PASSWORD '$PGPASSWORD'" --command="\du"
-
-           echo "Creating database..."
-           createdb --owner="$PGUSERNAME" --username="postgres" "$PGDATABASE"
+          echo "Initializing database cluster..."
+          
+          # Convert backslashes to forward slashes in RUNNER_TEMP for Windows Git Bash
+          export PGHOST="${RUNNER_TEMP//\\//}/postgres"
+          export PGDATA="$PGHOST/pgdata"
+          mkdir -p "$PGDATA"
+          
+          # initdb requires file for password in non-interactive mode
+          export PWFILE="$RUNNER_TEMP/pwfile"
+          echo "postgres" > "$PWFILE"
+          initdb --pgdata="$PGDATA" --username="postgres" --pwfile="$PWFILE"
+          
+          echo "Starting PostgreSQL..."
+          echo "unix_socket_directories = '$PGHOST'" >> "$PGDATA/postgresql.conf"
+          pg_ctl  start
+          
+          echo "Creating user..."
+          psql --host "$PGHOST" --username="postgres" --dbname="postgres" --command="CREATE USER $PGUSERNAME PASSWORD '$PGPASSWORD'" --command="\du"
+          
+          echo "Creating database..."
+          createdb --owner="$PGUSERNAME" --username="postgres" "$PGDATABASE"
 
       - uses: actions/cache@v4
         with:
@@ -83,11 +83,7 @@ jobs:
           poetry install --no-root
       - name: start the service
         run: |
-          sudo systemctl start postgresql.service
-          systemctl status postgresql.service
           env
-          
-
       - name: test
         run: pytest -vv
 
