@@ -18,6 +18,7 @@ jobs:
       PGDATABASE: test
       PGUSERNAME: test
       PGPASSWORD: test
+      ACTIONS_TEST: true
 
     steps:
       - name: Install PostgreSQL on macOS
@@ -51,7 +52,7 @@ jobs:
 
            echo "Starting PostgreSQL..."
            echo "unix_socket_directories = '$PGHOST'" >> "$PGDATA/postgresql.conf"
-           pg_ctl start
+           pg_ctl -o "-F -p 5433" start
 
            echo "Creating user..."
            psql --host "$PGHOST" --username="postgres" --dbname="postgres" --command="CREATE USER $PGUSERNAME PASSWORD '$PGPASSWORD'" --command="\du"
