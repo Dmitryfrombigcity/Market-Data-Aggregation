@@ -87,8 +87,10 @@ BUNCH_OF_TICKERS=SBER,LKOH           # Набор акций (по умолча�
 
 ## Логирование
 Вывод большинства ошибок подавляется, и выводится лишь сообщение о том, что произошла ошибка.  
-При этом подробный отчёт записывается в `logs/logging.txt` с помощью [Loguru](https://loguru.readthedocs.io/en/stable/).
+При этом подробный отчёт записывается в `logs/logging.txt` с помощью [Loguru](https://loguru.readthedocs.io/en/stable/).  
 
+------------
+[![ubuntu-latest  windows-latest macos-latest](https://github.com/Dmitryfrombigcity/Market-Data-Aggregation/actions/workflows/os_test.yml/badge.svg)](https://github.com/Dmitryfrombigcity/Market-Data-Aggregation/actions/workflows/os_test.yml)
 ## Клонирование проекта и установка зависимостей
 Для начала работы с проектом необходимо склонировать репозиторий на ваш компьютер.  
 Для этого выполните следующую команду в терминале:
@@ -99,20 +101,23 @@ git clone https://github.com/Dmitryfrombigcity/Market-Data-Aggregation
 ```
 cd Market-Data-Aggregation
 ```
+В системе должен быть один из поддерживаемых интерпретаторов, если нет, то [установите](https://www.python.org/downloads/)   
+[![python-3.12](https://github.com/Dmitryfrombigcity/Market-Data-Aggregation/actions/workflows/python-3.12.yml/badge.svg)](https://github.com/Dmitryfrombigcity/Market-Data-Aggregation/actions/workflows/python-3.12.yml)
+[![python-3.13](https://github.com/Dmitryfrombigcity/Market-Data-Aggregation/actions/workflows/python-3.13.yml/badge.svg)](https://github.com/Dmitryfrombigcity/Market-Data-Aggregation/actions/workflows/python-3.13.yml)  
+
 ## Установка зависимостей
 Если вы используете `pip`:  
-### Создайте и активируйте виртуальное окружение:
+### Создайте и активируйте виртуальное окружение:  
+*Возможно придётся указать путь к интерпретатору.*
 ```
 pip install virtualenv
 virtualenv -p python3.12 venv
 source venv/bin/activate
 ```
-`В системе должен быть python3.12`, если нет, то [установите](https://www.python.org/downloads/)  
-  Возможно придётся указать `полный путь к интерпретатору`.  
-  *Для Windows активация будет другая:*
-  ```
-  venv\Scripts\activate.bat
-  ```
+*Для Windows активация будет другая:*
+```
+venv\Scripts\activate.bat
+```
 ### Установите зависимости из файла requirements.txt:
 ```
 pip install -r requirements.txt
