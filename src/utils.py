@@ -13,26 +13,26 @@ from pydantic_settings import BaseSettings
 def start_db() -> Iterator[None]:
     """ database management"""
 
-    # subpr = subprocess.run(
-    #     'docker compose -f postgrs_on_docker.yml up -d',
-    #     stderr=subprocess.PIPE,
-    #     text=True,
-    #     shell=True
-    # )
-    # if subpr.returncode:
-    #     print("Docker not found. Trying to connect to local database...")
-    #     logger.error(subpr.stderr)
-    # print("Docker is starting...", end='')
-    # sleep(5)
-    # try:
-    #     yield
-    # finally:
-    #     subprocess.run(
-    #         'docker compose -f postgrs_on_docker.yml down',
-    #         stderr=subprocess.PIPE,
-    #         shell=True
-    #     )
-    yield
+    subpr = subprocess.run(
+        'docker compose -f postgrs_on_docker.yml up -d',
+        stderr=subprocess.PIPE,
+        text=True,
+        shell=True
+    )
+    if subpr.returncode:
+        print("Docker not found. Trying to connect to local database...")
+        logger.error(subpr.stderr)
+    print("Docker is starting...", end='')
+    sleep(5)
+    try:
+        yield
+    finally:
+        subprocess.run(
+            'docker compose -f postgrs_on_docker.yml down',
+            stderr=subprocess.PIPE,
+            shell=True
+        )
+
 
 
 def instantiate[T: BaseSettings](Settings: Type[T]) -> T:
