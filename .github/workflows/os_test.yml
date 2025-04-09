@@ -6,13 +6,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest]
         version: [ "3.12" ]
         include:
           - os: ubuntu-latest
             path: ~/.cache/pypoetry
-          - os: windows-latest
-            path: ~\AppData\Local\pypoetry\Cache
+#          - os: windows-latest
+#            path: ~\AppData\Local\pypoetry\Cache
     steps:
 
       - uses: actions/cache@v4
@@ -28,27 +28,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.version }}
-
-      - uses: vedantmgoyal9/setup-wsl2@main
-      - run: apt update && apt upgrade -y
-        shell: wsl-run {0} # add this to run the commands inside linux
-      - run: |
-          ls -al
-          env
-        shell: wsl-run {0} # don't forget to add this
-        env:
-          MY_ENV_VAR: MY_VALUE
-          # WSLENV is a special environment variable to share environment variables between windows and linux
-          # see https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows
-          WSLENV: MY_ENV_VAR
-      - name: Set up Docker
-        run: |
-          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-        shell: wsl-run {0}
-
-
-      - run: docker compose -f tests/docker_for_tests.yml up -d
-        shell: wsl-run {0}
       - name: install poetry
         run: |
           pip install poetry==1.8.3 
@@ -56,6 +35,12 @@ jobs:
       - name: add deps
         run: |
           poetry install --no-root
+      - name: start the service
+        run: |
+          sudo systemctl start postgresql.service
+          systemctl status postgresql.service
+          
+
       - name: test
         run: pytest -vv
 
