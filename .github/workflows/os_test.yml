@@ -13,6 +13,8 @@ jobs:
             path: ~/.cache/pypoetry
           - os: windows-latest
             path: ~\AppData\Local\pypoetry\Cache
+          - os: macos-latest
+            path: ~/Library/Caches/pip
     env:
       PGHOST: localhost
       PGPORT: 5433
@@ -81,9 +83,6 @@ jobs:
       - name: add deps
         run: |
           poetry install --no-root
-      - name: start the service
-        run: |
-          env
       - name: test
         run: pytest -vv
 
