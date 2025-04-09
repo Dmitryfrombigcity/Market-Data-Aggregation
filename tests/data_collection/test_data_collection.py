@@ -9,9 +9,6 @@ from src.data_collection import get_information, get_dividends
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 
-if sys.platform == "win32":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
 
 @pytest.mark.usefixtures("mockers")
 class TestDataCollection:
