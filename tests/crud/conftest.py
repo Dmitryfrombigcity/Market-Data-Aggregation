@@ -13,12 +13,12 @@ from src.db.connection import connection
 @pytest.fixture(scope='module')
 def start_db() -> Iterator[None]:
 
-    path = 'docker compose -f tests/docker_for_tests.yml'
+    path = 'tests/docker_for_tests.yml'
     if sys.platform == "win32":
-        path = 'docker-compose.exe -f tests\\docker_for_tests.yml'
+        path = 'tests\\docker_for_tests.yml'
 
     subprocess.run(
-        f'{path} up -d',
+        f'docker compose -f{path} up -d',
         shell=True,
         capture_output=True
     )
@@ -27,7 +27,7 @@ def start_db() -> Iterator[None]:
         yield
     finally:
         subprocess.run(
-            f'{path} down',
+            f'docker compose -f{path} down',
             shell=True,
             capture_output=True
         )
