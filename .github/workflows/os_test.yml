@@ -17,7 +17,7 @@ jobs:
             path: ~/Library/Caches/pip
     env:
       PGHOST: localhost
-      PGPORT: 5433
+      PGPORT: 5432
       PGDATABASE: test
       PGUSERNAME: test
       PGPASSWORD: test
