@@ -6,7 +6,7 @@ on:
         required: true
         type: string
 env:
-  ACTIONS_TEST: true        
+  ACTIONS_TEST: true
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -23,7 +23,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
-
       - name: install poetry
         run: |
           pip install poetry==1.8.3 
@@ -31,7 +30,8 @@ jobs:
       - name: add deps
         run: |
           poetry install --no-root
-      - run: echo "${{ env.ACTIONS_TEST }}"
+      - name: Use the following command as a part of your job to start the service
+        run: sudo systemctl start postgresql.service
       - name: test
         run: pytest -vv
 
