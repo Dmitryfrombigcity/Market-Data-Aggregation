@@ -12,21 +12,22 @@ from src.db.connection import connection
 
 @pytest.fixture(scope='module')
 def start_db() -> Iterator[None]:
-    path = Path(Path(__file__).resolve().parent.parent / 'docker_for_tests.yml')
-    subprocess.run(
-        f'docker compose -f{path} up -d',
-        shell=True,
-        capture_output=True
-    )
-    sleep(5)
-    try:
-        yield
-    finally:
-        subprocess.run(
-            f'docker compose -f{path} down',
-            shell=True,
-            capture_output=True
-        )
+    # path = Path(Path(__file__).resolve().parent.parent / 'docker_for_tests.yml')
+    # subprocess.run(
+    #     f'docker compose -f{path} up -d',
+    #     shell=True,
+    #     capture_output=True
+    # )
+    # sleep(5)
+    # try:
+    #     yield
+    # finally:
+    #     subprocess.run(
+    #         f'docker compose -f{path} down',
+    #         shell=True,
+    #         capture_output=True
+    #     )
+    yield
 
 
 @pytest.fixture(scope='function')
