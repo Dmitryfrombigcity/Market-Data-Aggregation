@@ -18,9 +18,9 @@ jobs:
     env:
       PGHOST: localhost
       PGPORT: 5432
-      PGDATABASE: test
-      PGUSERNAME: test
-      PGPASSWORD: test
+      PGDATABASE: aggregation
+      PGUSERNAME: user
+      PGPASSWORD: password
       ACTIONS_TEST: true
 
     steps:
