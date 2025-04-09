@@ -1,4 +1,4 @@
-name: ubuntu-latest macos-latest windows-latest
+name: ubuntu-latest  windows-latest
 on: push
 jobs:
   test:
@@ -6,17 +6,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-        version: [ "3.12", "3.13" ]
+        os: [ ubuntu-latest, windows-latest ]
+        version: [ "3.12" ]
         include:
           - os: ubuntu-latest
             path: ~/.cache/pypoetry
-          - os: macos-latest
-            path: ~/Library/Caches/pypoetry
           - os: windows-latest
             path: ~\AppData\Local\pypoetry\Cache
     steps:
-      - run: docker compose
+
       - uses: actions/cache@v4
         with:
           path: ${{ matrix.path }}
@@ -25,6 +23,7 @@ jobs:
             ${{ runner.os }}-pypoetry-
       - name: cloning
         uses: actions/checkout@v4.2.2
+      - run: docker compose -f test\docker_for_tests.yml up -d
       - name: install Python
         uses: actions/setup-python@v5
         with:
@@ -36,7 +35,6 @@ jobs:
       - name: add deps
         run: |
           poetry install --no-root
-          docker info
       - name: test
         run: pytest -vv
 
