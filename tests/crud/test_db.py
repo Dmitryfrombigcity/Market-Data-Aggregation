@@ -16,8 +16,8 @@ from tests.crud.data.queries import query, insert_data, data, read, data_result,
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 
-if sys.platform == "win32":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+# if sys.platform == "win32":
+#     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
 @pytest.mark.usefixtures("start_db", "clean_after_test")
