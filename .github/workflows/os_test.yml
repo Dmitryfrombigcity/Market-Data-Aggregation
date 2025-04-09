@@ -35,6 +35,7 @@ jobs:
     - name: add deps
       run: |
         poetry install --no-root
+        docker info
     - name: test
       run: pytest -vv
 
