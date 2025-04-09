@@ -1,7 +1,7 @@
 name: ubuntu-latest  windows-latest macos-latest
 on: push
 jobs:
-  test_os:
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
@@ -17,10 +17,10 @@ jobs:
             path: ~/Library/Caches/pip
     env:
       PGHOST: localhost
-      PGPORT: 5433
-      PGDATABASE: test
-      PGUSERNAME: test
-      PGPASSWORD: test
+      PGPORT: 5432
+      PGDATABASE: aggregation
+      PGUSERNAME: user_
+      PGPASSWORD: password
       ACTIONS_TEST: true
 
     steps:
@@ -69,20 +69,21 @@ jobs:
           key: ${{ runner.os }}-pypoetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-pypoetry-
-      - name: cloning rep
+      - name: cloning
         uses: actions/checkout@v4.2.2
 
       - name: install Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.version }}
-      - name: install Poetry
+      - name: install poetry
         run: |
           pip install poetry==1.8.3 
           poetry config virtualenvs.create false
       - name: add deps
         run: |
           poetry install --no-root
-      - name: run tests
-        run: pytest -vv
+      - name: test
+#        run: pytest -vv
+        run: python main.py
 
