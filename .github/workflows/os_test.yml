@@ -1,0 +1,88 @@
+name: ubuntu-latest  windows-latest macos-latest
+on: push
+jobs:
+  test_os:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        version: [ "3.12" ]
+        include:
+          - os: ubuntu-latest
+            path: ~/.cache/pypoetry
+          - os: windows-latest
+            path: ~\AppData\Local\pypoetry\Cache
+          - os: macos-latest
+            path: ~/Library/Caches/pip
+    env:
+      PGHOST: localhost
+      PGPORT: 5433
+      PGDATABASE: test
+      PGUSERNAME: test
+      PGPASSWORD: test
+      ACTIONS_TEST: true
+
+    steps:
+      - name: Install PostgreSQL on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install postgresql@16
+          # --overwrite: Overwrite pre-installed GitHub Actions PostgreSQL binaries
+          brew link --overwrite postgresql@16
+      - name: Add PostgreSQL binaries to PATH
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+          echo "$PGBIN" >> $GITHUB_PATH
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+          echo "$(pg_config --bindir)" >> $GITHUB_PATH
+          fi
+      - name: Start preinstalled PostgreSQL
+        shell: bash
+        run: |
+          echo "Initializing database cluster..."
+          
+          # Convert backslashes to forward slashes in RUNNER_TEMP for Windows Git Bash
+          export PGHOST="${RUNNER_TEMP//\\//}/postgres"
+          export PGDATA="$PGHOST/pgdata"
+          mkdir -p "$PGDATA"
+          
+          # initdb requires file for password in non-interactive mode
+          export PWFILE="$RUNNER_TEMP/pwfile"
+          echo "postgres" > "$PWFILE"
+          initdb --pgdata="$PGDATA" --username="postgres" --pwfile="$PWFILE"
+          
+          echo "Starting PostgreSQL..."
+          echo "unix_socket_directories = '$PGHOST'" >> "$PGDATA/postgresql.conf"
+          pg_ctl  start
+          
+          echo "Creating user..."
+          psql --host "$PGHOST" --username="postgres" --dbname="postgres" --command="CREATE USER $PGUSERNAME PASSWORD '$PGPASSWORD'" --command="\du"
+          
+          echo "Creating database..."
+          createdb --owner="$PGUSERNAME" --username="postgres" "$PGDATABASE"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ matrix.path }}
+          key: ${{ runner.os }}-pypoetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pypoetry-
+      - name: cloning rep
+        uses: actions/checkout@v4.2.2
+
+      - name: install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.version }}
+      - name: install Poetry
+        run: |
+          pip install poetry==1.8.3 
+          poetry config virtualenvs.create false
+      - name: add deps
+        run: |
+          poetry install --no-root
+      - name: run tests
+        run: pytest -vv
+
