@@ -23,11 +23,26 @@ jobs:
             ${{ runner.os }}-pypoetry-
       - name: cloning
         uses: actions/checkout@v4.2.2
-      - run: docker compose -f tests\docker_for_tests.yml up -d
+
       - name: install Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.version }}
+
+      - uses: vedantmgoyal9/setup-wsl2@main
+      - run: apt update && apt upgrade -y
+        shell: wsl-run {0} # add this to run the commands inside linux
+      - run: |
+          ls -al
+          env
+        shell: wsl-run {0} # don't forget to add this
+        env:
+          MY_ENV_VAR: MY_VALUE
+          # WSLENV is a special environment variable to share environment variables between windows and linux
+          # see https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows
+          WSLENV: MY_ENV_VAR
+
+      - run: docker compose -f tests\docker_for_tests.yml up -d
       - name: install poetry
         run: |
           pip install poetry==1.8.3 
