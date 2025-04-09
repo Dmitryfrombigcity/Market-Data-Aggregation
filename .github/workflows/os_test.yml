@@ -15,6 +15,7 @@ jobs:
 #            path: ~\AppData\Local\pypoetry\Cache
     env:
       PGHOST: localhost
+      PGPORT: 5433
       PGDATABASE: test
       PGUSERNAME: test
       PGPASSWORD: test
@@ -52,7 +53,7 @@ jobs:
 
            echo "Starting PostgreSQL..."
            echo "unix_socket_directories = '$PGHOST'" >> "$PGDATA/postgresql.conf"
-           pg_ctl -o "-F -p 5433" start
+           pg_ctl  start
 
            echo "Creating user..."
            psql --host "$PGHOST" --username="postgres" --dbname="postgres" --command="CREATE USER $PGUSERNAME PASSWORD '$PGPASSWORD'" --command="\du"
