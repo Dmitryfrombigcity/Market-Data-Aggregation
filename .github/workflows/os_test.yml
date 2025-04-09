@@ -41,8 +41,11 @@ jobs:
           # WSLENV is a special environment variable to share environment variables between windows and linux
           # see https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows
           WSLENV: MY_ENV_VAR
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+        shell: wsl-run {0}
 
-      - run: docker compose -f tests\docker_for_tests.yml up -d
+      - run: docker compose -f tests/docker_for_tests.yml up -d
         shell: wsl-run {0}
       - name: install poetry
         run: |
