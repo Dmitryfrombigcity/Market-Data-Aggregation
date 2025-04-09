@@ -19,7 +19,7 @@ jobs:
       PGHOST: localhost
       PGPORT: 5432
       PGDATABASE: aggregation
-      PGUSERNAME: user
+      PGUSERNAME: user_
       PGPASSWORD: password
       ACTIONS_TEST: true
 
